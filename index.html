@@ -43,7 +43,7 @@
   .stats { display: flex; gap: 6px; }
   .stat-pill { font-size: 12px; padding: 4px 10px; border-radius: 8px; font-weight: 600; }
   .pill-free  { background: #d1fae5; color: #065f46; }
-  .pill-taken { background: #fee2e2; color: #991b1b; }
+  .pill-taken { background: #fef3c7; color: #78350f; }
 
   .sync-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888; }
   .sync-dot {
@@ -62,7 +62,12 @@
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
   .dot { width: 12px; height: 12px; border-radius: 3px; }
   .dot-free  { background: #fff; border: 1px solid #ccc; }
-  .dot-taken { background: #E24B4A; }
+  .dot-taken { 
+    background: radial-gradient(circle at 30% 30%, #e07a3f 20%, transparent 25%),
+                radial-gradient(circle at 75% 70%, #d4a054 15%, transparent 20%),
+                #2b262d; 
+    border: 1px solid #1a161b;
+  }
 
   /* ── Cuadrícula principal (Grid) ── */
   .grid {
@@ -80,8 +85,21 @@
   }
   .num-btn:hover  { background: #f0f0f0; border-color: #999; }
   .num-btn:active { transform: scale(0.92); }
-  .num-btn.taken  { background: #E24B4A; border-color: #A32D2D; color: #fff; }
-  .num-btn.taken:hover { background: #c53030; }
+  
+  /* Estilo Carey para números tomados */
+  .num-btn.taken  { 
+    background: radial-gradient(circle at 30% 30%, #e07a3f 18%, transparent 22%),
+                radial-gradient(circle at 75% 70%, #d4a054 15%, transparent 20%),
+                #2b262d; 
+    border-color: #1a161b; 
+    color: #fff; 
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+  }
+  .num-btn.taken:hover { 
+    background: radial-gradient(circle at 35% 35%, #f08b50 18%, transparent 22%),
+                radial-gradient(circle at 70% 65%, #e5b165 15%, transparent 20%),
+                #3a343d; 
+  }
   .num-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
   .status-bar { font-size: 11px; color: #999; text-align: center; margin-top: 10px; min-height: 18px; }
@@ -117,7 +135,7 @@
   }
   .modal-title { font-size: 16px; font-weight: 600; }
   .num-badge {
-    background: #dbeafe; color: #1d4ed8;
+    background: #fef3c7; color: #92400e;
     font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 8px;
   }
   .close-btn {
@@ -131,7 +149,7 @@
     border: 1px solid #ddd; background: #fafafa;
     color: #1a1a1a; font-size: 15px; font-family: inherit;
   }
-  .form-input:focus { outline: none; border-color: #2563eb; background: #fff; }
+  .form-input:focus { outline: none; border-color: #e07a3f; background: #fff; }
   .form-input.error { border-color: #ef4444; background: #fff5f5; animation: shake 0.3s; }
   @keyframes shake {
     0%,100%{ transform: translateX(0); }
@@ -140,11 +158,11 @@
   }
 
   .btn-primary {
-    width: 100%; padding: 11px; background: #0F6E56; color: #fff;
+    width: 100%; padding: 11px; background: #2b262d; color: #fff;
     border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
     cursor: pointer; margin-top: 0.5rem; font-family: inherit;
   }
-  .btn-primary:hover { background: #085041; }
+  .btn-primary:hover { background: #3a343d; }
   .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
 
   .info-row {
