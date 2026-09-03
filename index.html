@@ -7,7 +7,8 @@
 <link rel="icon" href="https://www.favicon.cc/favicon/48/1020/favicon.ico" type="image/x-icon" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet"> <style>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet">
+<style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -19,12 +20,10 @@
     margin: 0 auto; 
     padding: 1.5rem 1rem; 
   }
-
   .header {
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: wrap; gap: 12px; margin-bottom: 1rem;
   }
-  
   .titulo-con-gif { 
     display: flex; 
     align-items: center; 
@@ -32,7 +31,7 @@
     font-size: 22px; 
     font-weight: 600; 
     color: #7C27C2; 
-    font-family: 'Fredoka', cursive;
+    font-family: 'Fredoka', cursive; 
   }
   .gif-titulo {
     width: 38px;
@@ -40,14 +39,11 @@
     object-fit: contain;
     flex-shrink: 0;
   }
-
   .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  
   .stats { display: flex; gap: 6px; }
   .stat-pill { font-size: 12px; padding: 4px 10px; border-radius: 8px; font-weight: 600; }
   .pill-free  { background: #d1fae5; color: #065f46; }
   .pill-taken { background: #f3e8ff; color: #6b21a8; }
-
   .sync-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888; }
   .sync-dot {
     width: 7px; height: 7px; border-radius: 50%;
@@ -57,7 +53,6 @@
   .sync-dot.syncing { background: #f59e0b; animation: pulse 1s infinite; }
   .sync-dot.error   { background: #ef4444; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
   .legend { 
     display: flex; gap: 14px; margin-bottom: 0.75rem; 
     justify-content: center; 
@@ -65,11 +60,7 @@
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
   .dot { width: 12px; height: 12px; border-radius: 3px; }
   .dot-free  { background: #fff; border: 1px solid #ccc; }
-  .dot-taken { 
-    background: #a855f7; 
-    border: 1px solid #9333ea;
-  }
-
+  .dot-taken { background: #a855f7; border: 1px solid #9333ea; }
   .grid {
     display: grid; 
     grid-template-columns: repeat(10, 1fr); 
@@ -85,31 +76,16 @@
   }
   .num-btn:hover  { background: #f0f0f0; border-color: #999; }
   .num-btn:active { transform: scale(0.92); }
-  
-  .num-btn.taken  { 
-    background: #a855f7; 
-    border-color: #9333ea; 
-    color: #fff; 
-  }
-  .num-btn.taken:hover { 
-    background: #9333ea; 
-  }
+  .num-btn.taken  { background: #a855f7; border-color: #9333ea; color: #fff; }
+  .num-btn.taken:hover { background: #9333ea; }
   .num-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
   .status-bar { font-size: 11px; color: #999; text-align: center; margin-top: 10px; min-height: 18px; }
-
   @media (max-width: 520px) {
     .header { flex-direction: column; justify-content: center; text-align: center; }
     .header-right { justify-content: center; }
-    .grid {
-      grid-template-columns: repeat(5, 1fr); 
-      gap: 8px; padding: 12px;
-    }
-    .num-btn {
-      font-size: 13px; min-height: 42px; 
-    }
+    .grid { grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 12px; }
+    .num-btn { font-size: 13px; min-height: 42px; }
   }
-
   .overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.5);
@@ -122,9 +98,7 @@
     width: 100%; max-width: 340px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
   }
-  .modal-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
-  }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
   .modal-title { font-size: 16px; font-weight: 600; }
   .num-badge {
     background: #f3e8ff; color: #6b21a8;
@@ -148,7 +122,6 @@
     25%     { transform: translateX(-6px); }
     75%     { transform: translateX(6px); }
   }
-
   .btn-primary {
     width: 100%; padding: 11px; background: #9333ea; color: #fff;
     border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
@@ -156,14 +129,12 @@
   }
   .btn-primary:hover { background: #7e22ce; }
   .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
-
   .info-row {
     display: flex; align-items: center; gap: 10px;
     padding: 8px 0; border-top: 1px solid #f0f0f0; font-size: 14px;
   }
   .info-icon { color: #888; flex-shrink: 0; width: 20px; text-align: center; }
   .info-val  { color: #1a1a1a; font-weight: 500; }
-
   .pin-error { font-size: 12px; color: #dc2626; margin-top: 4px; min-height: 16px; display: block; }
 </style>
 </head>
@@ -186,12 +157,10 @@
       </div>
     </div>
   </div>
-
   <div class="legend">
     <div class="legend-item"><div class="dot dot-free"></div> Disponible</div>
     <div class="legend-item"><div class="dot dot-taken"></div> Ocupado</div>
   </div>
-
   <div class="grid" id="grid"></div>
   <p class="status-bar" id="status-bar"></p>
 </div>
@@ -205,7 +174,6 @@
         <button class="close-btn" id="btn-close" aria-label="Cerrar">×</button>
       </div>
     </div>
-
     <div id="view-register">
       <div class="form-group">
         <label class="form-label" for="inp-name">Nombre del comprador</label>
@@ -222,7 +190,6 @@
       </div>
       <button class="btn-primary" id="btn-save">✓ Guardar</button>
     </div>
-
     <div id="view-detail" style="display:none;">
       <div class="info-row"><span class="info-icon">👤</span><span class="info-val" id="detail-name"></span></div>
       <div class="info-row"><span class="info-icon">📱</span><span class="info-val" id="detail-phone"></span></div>
@@ -242,17 +209,16 @@
 </div>
 
 <script>
-const TOTAL      = 300; 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytQsoI00wEl2xwQlo8Osq5qjHpIstBz7IobqOkyq7I5PYJg-8uVlLH_lknUBM6Rj3N/exec';
-
+const TOTAL = 300; 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUCg3TDNThR3iSWlF4PqeMnUtmkZLrHnhAtyXnQAqThHYKTWmcHqxX_0djdQbKvc5G/exec';
 const HASH_CLAVE = 'e3a7f2426fe7214eb03bbb6cb232412bb4f484cebceafc7d395a9a23a57a2361'; 
 
-let localData   = {};
+let localData = {};
 let selectedNum = null;
-let busy        = false;
+let busy = false;
 
 function setSync(estado, texto) {
-  document.getElementById('sync-dot').className     = 'sync-dot ' + estado;
+  document.getElementById('sync-dot').className = 'sync-dot ' + estado;
   document.getElementById('sync-label').textContent = texto;
 }
 function setStatus(txt) {
@@ -285,18 +251,13 @@ async function guardarNumero(num, name, phone, pin) {
   setSync('syncing', 'Guardando...');
   setGridBusy(true);
   try {
- 
     const resp = await apiFetch({ action: 'set', num: num, name: name, phone: phone, pin: pin });
-
     if (resp.ok) {
-     
       localData[num] = { name }; 
       renderGrid(); updateStats();
       setSync('online', 'Guardado ✓');
       setStatus('Actualizado: ' + new Date().toLocaleTimeString());
-
     } else if (resp.error === 'clave_invalida') {
-      
        setSync('error', 'Clave rechazada');
        setStatus('El servidor rechazó la clave.');
     } else if (resp.error === 'ya_tomado') {
@@ -311,7 +272,6 @@ async function guardarNumero(num, name, phone, pin) {
       setSync('error', 'Error al guardar');
       setStatus('El servidor rechazó la operación. Intenta de nuevo.');
     }
-
   } catch(e) {
     setSync('error', 'Error al guardar');
     setStatus('No se pudo guardar. Verifica tu conexión.');
@@ -329,11 +289,10 @@ function renderGrid() {
   grid.innerHTML = '';
   for (let i = 1; i <= TOTAL; i++) {
     const btn = document.createElement('button');
-    btn.className   = 'num-btn' + (localData[i] ? ' taken' : '');
+    btn.className = 'num-btn' + (localData[i] ? ' taken' : '');
     btn.textContent = i;
-    btn.disabled    = busy;
-    btn.setAttribute('aria-label',
-      'Número ' + i + (localData[i] ? ' - ' + localData[i].name : ''));
+    btn.disabled = busy;
+    btn.setAttribute('aria-label', 'Número ' + i + (localData[i] ? ' - ' + localData[i].name : ''));
     btn.onclick = () => openModal(i);
     grid.appendChild(btn);
   }
@@ -341,7 +300,7 @@ function renderGrid() {
 
 function updateStats() {
   const taken = Object.keys(localData).length;
-  document.getElementById('stat-free').textContent  = (TOTAL - taken) + ' disponibles';
+  document.getElementById('stat-free').textContent = (TOTAL - taken) + ' disponibles';
   document.getElementById('stat-taken').textContent = taken + ' ocupados';
 }
 
@@ -351,23 +310,20 @@ function openModal(num) {
   document.getElementById('overlay').classList.add('active');
 
   if (localData[num]) {
-    document.getElementById('modal-action').textContent    = 'Número ocupado';
-    document.getElementById('detail-name').textContent     = localData[num].name;
-    
-    document.getElementById('detail-phone').textContent    = "Oculto por seguridad";
+    document.getElementById('modal-action').textContent = 'Número ocupado';
+    document.getElementById('detail-name').textContent = localData[num].name;
+    document.getElementById('detail-phone').textContent = "Oculto por seguridad";
     document.getElementById('view-register').style.display = 'none';
-    document.getElementById('view-detail').style.display   = 'block';
+    document.getElementById('view-detail').style.display = 'block';
   } else {
-    document.getElementById('modal-action').textContent    = 'Registrar número';
-    document.getElementById('inp-name').value  = '';
+    document.getElementById('modal-action').textContent = 'Registrar número';
+    document.getElementById('inp-name').value = '';
     document.getElementById('inp-phone').value = '';
-    
     document.getElementById('inp-reg-pin').value = '';
     document.getElementById('reg-pin-error').textContent = '';
     document.getElementById('inp-reg-pin').classList.remove('error');
-
     document.getElementById('view-register').style.display = 'block';
-    document.getElementById('view-detail').style.display   = 'none';
+    document.getElementById('view-detail').style.display = 'none';
     setTimeout(() => document.getElementById('inp-name').focus(), 80);
   }
 }
@@ -383,10 +339,10 @@ document.getElementById('overlay').onclick = e => {
 };
 
 document.getElementById('btn-save').onclick = async () => {
-  const name   = document.getElementById('inp-name').value.trim();
-  const phone  = document.getElementById('inp-phone').value.trim();
-  const pin    = document.getElementById('inp-reg-pin').value;
-  const errEl  = document.getElementById('reg-pin-error');
+  const name = document.getElementById('inp-name').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+  const pin = document.getElementById('inp-reg-pin').value;
+  const errEl = document.getElementById('reg-pin-error');
   const pinInp = document.getElementById('inp-reg-pin');
 
   errEl.textContent = '';
@@ -416,9 +372,7 @@ document.getElementById('btn-save').onclick = async () => {
   btn.disabled = true; btn.textContent = 'Guardando...';
   
   closeModal(); 
-
   await guardarNumero(num, name, phone, pin); 
-  
   btn.disabled = false; btn.textContent = '✓ Guardar';
 };
 
@@ -428,3 +382,24 @@ document.getElementById('inp-reg-pin').addEventListener('keydown', e => {
 
 function mostrarAviso(titulo, msg) {
   document.getElementById('aviso-titulo').textContent = titulo;
+  document.getElementById('aviso-msg').innerHTML = msg;
+  document.getElementById('overlay-aviso').classList.add('active');
+}
+
+function cerrarAviso() {
+  document.getElementById('overlay-aviso').classList.remove('active');
+}
+
+document.getElementById('btn-aviso-close').onclick = cerrarAviso;
+document.getElementById('btn-aviso-ok').onclick = cerrarAviso;
+document.getElementById('overlay-aviso').onclick = e => {
+  if (e.target === document.getElementById('overlay-aviso')) cerrarAviso();
+};
+
+setInterval(cargarDatos, 30000);
+renderGrid();
+updateStats();
+cargarDatos();
+</script>
+</body>
+</html>
