@@ -191,7 +191,7 @@
   <p class="status-bar" id="status-bar"></p>
 </div>
 
-<!-- ── Modal: ver / registrar número ── -->
+
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-header">
@@ -202,7 +202,7 @@
       </div>
     </div>
 
-    <!-- Vista: registrar -->
+    
     <div id="view-register">
       <div class="form-group">
         <label class="form-label" for="inp-name">Nombre del comprador</label>
@@ -220,7 +220,7 @@
       <button class="btn-primary" id="btn-save">✓ Guardar</button>
     </div>
 
-    <!-- Vista: detalle del ocupado -->
+ 
     <div id="view-detail" style="display:none;">
       <div class="info-row"><span class="info-icon">👤</span><span class="info-val" id="detail-name"></span></div>
       <div class="info-row"><span class="info-icon">📱</span><span class="info-val" id="detail-phone"></span></div>
@@ -228,7 +228,7 @@
   </div>
 </div>
 
-<!-- ── Modal: aviso número ya tomado ── -->
+
 <div class="overlay" id="overlay-aviso">
   <div class="modal">
     <div class="modal-header">
@@ -244,7 +244,6 @@
 const TOTAL      = 300; 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxsgYjHcJgS2XL7LpsqFlqam6f1OvrzCiYHP3nXKXzYVYiaUgeZdcyLIlUi1upDMpy1/exec';
 
-// Hash SHA-256 de la clave de administrador
 const HASH_CLAVE = 'e3a7f2426fe7214eb03bbb6cb232412bb4f484cebceafc7d395a9a23a57a2361'; 
 
 let localData   = {};
@@ -285,7 +284,7 @@ async function guardarNumero(num, name, phone) {
   setSync('syncing', 'Guardando...');
   setGridBusy(true);
   try {
-    // IMPORTANTE: Ya no usamos encodeURIComponent aquí
+   
     const resp = await apiFetch({ action: 'set', num: num, name: name, phone: phone });
 
     if (resp.ok) {
