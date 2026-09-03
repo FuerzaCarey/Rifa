@@ -43,7 +43,7 @@
   .stats { display: flex; gap: 6px; }
   .stat-pill { font-size: 12px; padding: 4px 10px; border-radius: 8px; font-weight: 600; }
   .pill-free  { background: #d1fae5; color: #065f46; }
-  .pill-taken { background: #fef3c7; color: #78350f; }
+  .pill-taken { background: #f3e8ff; color: #6b21a8; }
 
   .sync-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888; }
   .sync-dot {
@@ -63,10 +63,8 @@
   .dot { width: 12px; height: 12px; border-radius: 3px; }
   .dot-free  { background: #fff; border: 1px solid #ccc; }
   .dot-taken { 
-    background: radial-gradient(circle at 30% 30%, #e07a3f 20%, transparent 25%),
-                radial-gradient(circle at 75% 70%, #d4a054 15%, transparent 20%),
-                #2b262d; 
-    border: 1px solid #1a161b;
+    background: #a855f7; 
+    border: 1px solid #9333ea;
   }
 
   /* ── Cuadrícula principal (Grid) ── */
@@ -86,19 +84,14 @@
   .num-btn:hover  { background: #f0f0f0; border-color: #999; }
   .num-btn:active { transform: scale(0.92); }
   
-  /* Estilo Carey para números tomados */
+  /* Estilo Lila para números tomados */
   .num-btn.taken  { 
-    background: radial-gradient(circle at 30% 30%, #e07a3f 18%, transparent 22%),
-                radial-gradient(circle at 75% 70%, #d4a054 15%, transparent 20%),
-                #2b262d; 
-    border-color: #1a161b; 
+    background: #a855f7; 
+    border-color: #9333ea; 
     color: #fff; 
-    box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
   }
   .num-btn.taken:hover { 
-    background: radial-gradient(circle at 35% 35%, #f08b50 18%, transparent 22%),
-                radial-gradient(circle at 70% 65%, #e5b165 15%, transparent 20%),
-                #3a343d; 
+    background: #9333ea; 
   }
   .num-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
@@ -135,7 +128,7 @@
   }
   .modal-title { font-size: 16px; font-weight: 600; }
   .num-badge {
-    background: #fef3c7; color: #92400e;
+    background: #f3e8ff; color: #6b21a8;
     font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 8px;
   }
   .close-btn {
@@ -149,7 +142,7 @@
     border: 1px solid #ddd; background: #fafafa;
     color: #1a1a1a; font-size: 15px; font-family: inherit;
   }
-  .form-input:focus { outline: none; border-color: #e07a3f; background: #fff; }
+  .form-input:focus { outline: none; border-color: #a855f7; background: #fff; }
   .form-input.error { border-color: #ef4444; background: #fff5f5; animation: shake 0.3s; }
   @keyframes shake {
     0%,100%{ transform: translateX(0); }
@@ -158,11 +151,11 @@
   }
 
   .btn-primary {
-    width: 100%; padding: 11px; background: #2b262d; color: #fff;
+    width: 100%; padding: 11px; background: #9333ea; color: #fff;
     border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
     cursor: pointer; margin-top: 0.5rem; font-family: inherit;
   }
-  .btn-primary:hover { background: #3a343d; }
+  .btn-primary:hover { background: #7e22ce; }
   .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
 
   .info-row {
@@ -221,11 +214,11 @@
     <div id="view-register">
       <div class="form-group">
         <label class="form-label" for="inp-name">Nombre del comprador</label>
-        <input class="form-input" type="text" id="inp-name" placeholder="Ej. Juan Pérez" autocomplete="off" />
+        <input class="form-input" type="text" id="inp-name" placeholder="Ej. Luis López" autocomplete="off" />
       </div>
       <div class="form-group">
         <label class="form-label" for="inp-phone">Celular</label>
-        <input class="form-input" type="tel" id="inp-phone" placeholder="Ej. 987 654 321" autocomplete="off" />
+        <input class="form-input" type="tel" id="inp-phone" placeholder="Ej. 999 999 999" autocomplete="off" />
       </div>
       <div class="form-group">
         <label class="form-label" for="inp-reg-pin">Clave de autorización</label>
@@ -259,8 +252,8 @@
 const TOTAL      = 300; 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1oP5obdvMLxW4bz7PRvth9BL_SlFTKxgHSRo-CA_jM82kKRxabDp243ZtmbGZjdk-/exec';
 
-// Hash SHA-256 de la contraseña "1234"
-const HASH_CLAVE = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; 
+// Hash SHA-256 de la contraseña "Dot50-cy"
+const HASH_CLAVE = 'd8dbf030a5d4d3a042e6f477e682ef1cf48fb07dcebc496c13edae96cdce7df8'; 
 
 let localData   = {};
 let selectedNum = null;
