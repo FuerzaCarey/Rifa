@@ -152,21 +152,6 @@
   .btn-primary:hover { background: #7e22ce; }
   .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
 
-  .btn-danger {
-    width: 100%; padding: 9px; background: none; color: #dc2626;
-    border: 1px solid #fecaca; border-radius: 8px;
-    font-size: 13px; font-weight: 500; cursor: pointer;
-    margin-top: 0.75rem; font-family: inherit;
-  }
-  .btn-danger:hover { background: #fee2e2; }
-
-  .btn-back {
-    width: 100%; padding: 9px; background: none; color: #888;
-    border: 1px solid #e5e5e5; border-radius: 8px;
-    font-size: 13px; cursor: pointer; margin-top: 6px; font-family: inherit;
-  }
-  .btn-back:hover { background: #f5f5f5; }
-
   .info-row {
     display: flex; align-items: center; gap: 10px;
     padding: 8px 0; border-top: 1px solid #f0f0f0; font-size: 14px;
@@ -174,7 +159,6 @@
   .info-icon { color: #888; flex-shrink: 0; width: 20px; text-align: center; }
   .info-val  { color: #1a1a1a; font-weight: 500; }
 
-  .pin-hint { font-size: 13px; color: #666; margin-bottom: 1rem; line-height: 1.5; }
   .pin-error { font-size: 12px; color: #dc2626; margin-top: 4px; min-height: 16px; display: block; }
 </style>
 </head>
@@ -240,26 +224,7 @@
     <div id="view-detail" style="display:none;">
       <div class="info-row"><span class="info-icon">👤</span><span class="info-val" id="detail-name"></span></div>
       <div class="info-row"><span class="info-icon">📱</span><span class="info-val" id="detail-phone"></span></div>
-      <button class="btn-danger" id="btn-release">🗑 Liberar número</button>
     </div>
-  </div>
-</div>
-
-<!-- ── Modal: clave para liberar ── -->
-<div class="overlay" id="overlay-pin">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">🔒 Clave de administrador</span>
-      <button class="close-btn" id="btn-pin-close" aria-label="Cerrar">×</button>
-    </div>
-    <p class="pin-hint">Ingresa la clave para liberar el número <strong id="pin-num-label"></strong>.</p>
-    <div class="form-group">
-      <label class="form-label" for="inp-pin">Clave</label>
-      <input class="form-input" type="password" id="inp-pin" placeholder="••••••" autocomplete="off" />
-      <p class="pin-error" id="pin-error"></p>
-    </div>
-    <button class="btn-primary" id="btn-pin-confirm">Confirmar</button>
-    <button class="btn-back" id="btn-pin-back">← Volver</button>
   </div>
 </div>
 
@@ -286,7 +251,6 @@ let localData   = {};
 let selectedNum = null;
 let busy        = false;
 
-// ── Sync ────────────────────────────────────
 function setSync(estado, texto) {
   document.getElementById('sync-dot').className     = 'sync-dot ' + estado;
   document.getElementById('sync-label').textContent = texto;
@@ -295,13 +259,9 @@ function setStatus(txt) {
   document.getElementById('status-bar').textContent = txt;
 }
 
-// ── API ─────────────────────────────────────
 async function apiFetch(params) {
-  // CORRECCIÓN ANTI-CACHÉ: Agregamos timestamp
   params.t = new Date().getTime(); 
   const url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
-  
-  // Agregamos cache: 'no-store' para obligar a pedir datos frescos
   const res = await fetch(url, { redirect: 'follow', cache: 'no-store' }); 
   if (!res.ok) throw new Error('HTTP ' + res.status);
   return res.json();
@@ -325,8 +285,8 @@ async function guardarNumero(num, name, phone) {
   setSync('syncing', 'Guardando...');
   setGridBusy(true);
   try {
-    // CORRECCIÓN %20: Enviamos name y phone sin encodeURIComponent
-    const resp = await apiFetch({ action: 'set', num, name: name, phone: phone });
+    // IMPORTANTE: Ya no usamos encodeURIComponent aquí
+    const resp = await apiFetch({ action: 'set', num: num, name: name, phone: phone });
 
     if (resp.ok) {
       localData[num] = { name, phone };
@@ -354,32 +314,6 @@ async function guardarNumero(num, name, phone) {
   setGridBusy(false);
 }
 
-// FUNCION DE LIBERAR NÚMERO
-async function liberarNumero(num) {
-  setSync('syncing', 'Liberando...');
-  setGridBusy(true);
-  try {
-    const resp = await apiFetch({ action: 'delete', num });
-
-    if (resp.ok) {
-      delete localData[num];
-      renderGrid(); updateStats();
-      setSync('online', 'Actualizado ✓');
-      setStatus('Actualizado: ' + new Date().toLocaleTimeString());
-    } else {
-      setSync('error', 'Error al liberar');
-      setStatus('No se pudo liberar. Intenta de nuevo.');
-      await cargarDatos();
-    }
-
-  } catch(e) {
-    setSync('error', 'Error al liberar');
-    setStatus('No se pudo liberar. Verifica tu conexión.');
-  }
-  setGridBusy(false);
-}
-
-// ── UI ──────────────────────────────────────
 function setGridBusy(state) {
   busy = state;
   document.querySelectorAll('.num-btn').forEach(b => b.disabled = state);
@@ -483,66 +417,6 @@ document.getElementById('btn-save').onclick = async () => {
 
 document.getElementById('inp-reg-pin').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-save').click();
-});
-
-// ── LÓGICA DE LIBERAR NÚMERO ─────
-document.getElementById('btn-release').onclick = () => {
-  const num = selectedNum; 
-  closeModal();
-  selectedNum = num;         
-  abrirPinModal();
-};
-
-function abrirPinModal() {
-  document.getElementById('pin-num-label').textContent = '#' + String(selectedNum).padStart(3, '0');
-  document.getElementById('inp-pin').value = '';
-  document.getElementById('pin-error').textContent = '';
-  document.getElementById('inp-pin').classList.remove('error');
-  document.getElementById('overlay-pin').classList.add('active');
-  setTimeout(() => document.getElementById('inp-pin').focus(), 80);
-}
-
-function cerrarPinModal() {
-  document.getElementById('overlay-pin').classList.remove('active');
-}
-
-document.getElementById('btn-pin-close').onclick = cerrarPinModal;
-document.getElementById('overlay-pin').onclick = e => {
-  if (e.target === document.getElementById('overlay-pin')) cerrarPinModal();
-};
-
-document.getElementById('btn-pin-back').onclick = () => {
-  cerrarPinModal();
-  if (selectedNum) openModal(selectedNum);
-};
-
-document.getElementById('btn-pin-confirm').onclick = async () => {
-  const pin    = document.getElementById('inp-pin').value;
-  const errEl  = document.getElementById('pin-error');
-  const pinInp = document.getElementById('inp-pin');
-
-  const encoder = new TextEncoder();
-  const data = encoder.encode(pin);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-  if (hashHex !== HASH_CLAVE) {
-    errEl.textContent = 'Clave incorrecta. Intenta de nuevo.';
-    pinInp.classList.add('error');
-    pinInp.value = '';
-    setTimeout(() => pinInp.classList.remove('error'), 400);
-    setTimeout(() => pinInp.focus(), 80);
-    return;
-  }
-
-  const num = selectedNum;
-  cerrarPinModal();
-  await liberarNumero(num);
-};
-
-document.getElementById('inp-pin').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('btn-pin-confirm').click();
 });
 
 function mostrarAviso(titulo, msg) {
