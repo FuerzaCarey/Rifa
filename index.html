@@ -4,8 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Rifa para Carey</title>
- <link rel="icon" href="https://www.favicon.cc/favicon/48/1020/favicon.ico" type="image/x-icon" />
-<style>
+<link rel="icon" href="https://www.favicon.cc/favicon/48/1020/favicon.ico" type="image/x-icon" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet"> <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -23,15 +25,14 @@
     flex-wrap: wrap; gap: 12px; margin-bottom: 1rem;
   }
   
- .titulo-con-gif { 
+  .titulo-con-gif { 
     display: flex; 
     align-items: center; 
     gap: 10px; 
-    font-size: 20px; 
+    font-size: 22px; 
     font-weight: 600; 
     color: #7C27C2; 
-    font-family: "Caacupé One", bold;
-
+    font-family: 'Fredoka', cursive;
   }
   .gif-titulo {
     width: 38px;
@@ -195,7 +196,6 @@
   <p class="status-bar" id="status-bar"></p>
 </div>
 
-
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-header">
@@ -206,7 +206,6 @@
       </div>
     </div>
 
-    
     <div id="view-register">
       <div class="form-group">
         <label class="form-label" for="inp-name">Nombre del comprador</label>
@@ -224,14 +223,12 @@
       <button class="btn-primary" id="btn-save">✓ Guardar</button>
     </div>
 
- 
     <div id="view-detail" style="display:none;">
       <div class="info-row"><span class="info-icon">👤</span><span class="info-val" id="detail-name"></span></div>
       <div class="info-row"><span class="info-icon">📱</span><span class="info-val" id="detail-phone"></span></div>
     </div>
   </div>
 </div>
-
 
 <div class="overlay" id="overlay-aviso">
   <div class="modal">
@@ -284,19 +281,24 @@ async function cargarDatos() {
   }
 }
 
-async function guardarNumero(num, name, phone) {
+async function guardarNumero(num, name, phone, pin) {
   setSync('syncing', 'Guardando...');
   setGridBusy(true);
   try {
-   
-    const resp = await apiFetch({ action: 'set', num: num, name: name, phone: phone });
+ 
+    const resp = await apiFetch({ action: 'set', num: num, name: name, phone: phone, pin: pin });
 
     if (resp.ok) {
-      localData[num] = { name, phone };
+     
+      localData[num] = { name }; 
       renderGrid(); updateStats();
       setSync('online', 'Guardado ✓');
       setStatus('Actualizado: ' + new Date().toLocaleTimeString());
 
+    } else if (resp.error === 'clave_invalida') {
+      
+       setSync('error', 'Clave rechazada');
+       setStatus('El servidor rechazó la clave.');
     } else if (resp.error === 'ya_tomado') {
       await cargarDatos();
       mostrarAviso(
@@ -351,7 +353,8 @@ function openModal(num) {
   if (localData[num]) {
     document.getElementById('modal-action').textContent    = 'Número ocupado';
     document.getElementById('detail-name').textContent     = localData[num].name;
-    document.getElementById('detail-phone').textContent    = localData[num].phone;
+    
+    document.getElementById('detail-phone').textContent    = "Oculto por seguridad";
     document.getElementById('view-register').style.display = 'none';
     document.getElementById('view-detail').style.display   = 'block';
   } else {
@@ -413,7 +416,8 @@ document.getElementById('btn-save').onclick = async () => {
   btn.disabled = true; btn.textContent = 'Guardando...';
   
   closeModal(); 
-  await guardarNumero(num, name, phone);
+
+  await guardarNumero(num, name, phone, pin); 
   
   btn.disabled = false; btn.textContent = '✓ Guardar';
 };
@@ -424,24 +428,3 @@ document.getElementById('inp-reg-pin').addEventListener('keydown', e => {
 
 function mostrarAviso(titulo, msg) {
   document.getElementById('aviso-titulo').textContent = titulo;
-  document.getElementById('aviso-msg').innerHTML = msg;
-  document.getElementById('overlay-aviso').classList.add('active');
-}
-
-function cerrarAviso() {
-  document.getElementById('overlay-aviso').classList.remove('active');
-}
-
-document.getElementById('btn-aviso-close').onclick = cerrarAviso;
-document.getElementById('btn-aviso-ok').onclick    = cerrarAviso;
-document.getElementById('overlay-aviso').onclick = e => {
-  if (e.target === document.getElementById('overlay-aviso')) cerrarAviso();
-};
-
-setInterval(cargarDatos, 30000);
-renderGrid();
-updateStats();
-cargarDatos();
-</script>
-</body>
-</html>
