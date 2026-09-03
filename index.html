@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<!-- maximum-scale=1.0 evita que la pantalla haga zoom accidental en celulares al tocar botones -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Rifa para Carey</title>
 <style>
@@ -23,7 +22,6 @@
     flex-wrap: wrap; gap: 12px; margin-bottom: 1rem;
   }
   
-  /* ── Estilos del Título y GIF ── */
   .titulo-con-gif { 
     display: flex; 
     align-items: center; 
@@ -57,7 +55,7 @@
 
   .legend { 
     display: flex; gap: 14px; margin-bottom: 0.75rem; 
-    justify-content: center; /* Centrar leyenda */
+    justify-content: center; 
   }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
   .dot { width: 12px; height: 12px; border-radius: 3px; }
@@ -67,10 +65,9 @@
     border: 1px solid #9333ea;
   }
 
-  /* ── Cuadrícula principal (Grid) ── */
   .grid {
     display: grid; 
-    grid-template-columns: repeat(10, 1fr); /* 10 columnas en PC */
+    grid-template-columns: repeat(10, 1fr); 
     gap: 6px;
     background: #fff; border-radius: 12px;
     padding: 15px; border: 1px solid #e5e5e5;
@@ -84,7 +81,6 @@
   .num-btn:hover  { background: #f0f0f0; border-color: #999; }
   .num-btn:active { transform: scale(0.92); }
   
-  /* Estilo Lila para números tomados */
   .num-btn.taken  { 
     background: #a855f7; 
     border-color: #9333ea; 
@@ -97,20 +93,18 @@
 
   .status-bar { font-size: 11px; color: #999; text-align: center; margin-top: 10px; min-height: 18px; }
 
-  /* ── Adaptación a Celulares ── */
   @media (max-width: 520px) {
     .header { flex-direction: column; justify-content: center; text-align: center; }
     .header-right { justify-content: center; }
     .grid {
-      grid-template-columns: repeat(5, 1fr); /* 5 columnas en celular */
+      grid-template-columns: repeat(5, 1fr); 
       gap: 8px; padding: 12px;
     }
     .num-btn {
-      font-size: 13px; min-height: 42px; /* Botones más altos para tocarlos fácil */
+      font-size: 13px; min-height: 42px; 
     }
   }
 
-  /* ── Modal base ── */
   .overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.5);
@@ -158,6 +152,21 @@
   .btn-primary:hover { background: #7e22ce; }
   .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
 
+  .btn-danger {
+    width: 100%; padding: 9px; background: none; color: #dc2626;
+    border: 1px solid #fecaca; border-radius: 8px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    margin-top: 0.75rem; font-family: inherit;
+  }
+  .btn-danger:hover { background: #fee2e2; }
+
+  .btn-back {
+    width: 100%; padding: 9px; background: none; color: #888;
+    border: 1px solid #e5e5e5; border-radius: 8px;
+    font-size: 13px; cursor: pointer; margin-top: 6px; font-family: inherit;
+  }
+  .btn-back:hover { background: #f5f5f5; }
+
   .info-row {
     display: flex; align-items: center; gap: 10px;
     padding: 8px 0; border-top: 1px solid #f0f0f0; font-size: 14px;
@@ -165,9 +174,8 @@
   .info-icon { color: #888; flex-shrink: 0; width: 20px; text-align: center; }
   .info-val  { color: #1a1a1a; font-weight: 500; }
 
-  .pin-error {
-    font-size: 12px; color: #dc2626; margin-top: 4px; min-height: 16px; display: block;
-  }
+  .pin-hint { font-size: 13px; color: #666; margin-bottom: 1rem; line-height: 1.5; }
+  .pin-error { font-size: 12px; color: #dc2626; margin-top: 4px; min-height: 16px; display: block; }
 </style>
 </head>
 <body>
@@ -232,7 +240,26 @@
     <div id="view-detail" style="display:none;">
       <div class="info-row"><span class="info-icon">👤</span><span class="info-val" id="detail-name"></span></div>
       <div class="info-row"><span class="info-icon">📱</span><span class="info-val" id="detail-phone"></span></div>
+      <button class="btn-danger" id="btn-release">🗑 Liberar número</button>
     </div>
+  </div>
+</div>
+
+<!-- ── Modal: clave para liberar ── -->
+<div class="overlay" id="overlay-pin">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🔒 Clave de administrador</span>
+      <button class="close-btn" id="btn-pin-close" aria-label="Cerrar">×</button>
+    </div>
+    <p class="pin-hint">Ingresa la clave para liberar el número <strong id="pin-num-label"></strong>.</p>
+    <div class="form-group">
+      <label class="form-label" for="inp-pin">Clave</label>
+      <input class="form-input" type="password" id="inp-pin" placeholder="••••••" autocomplete="off" />
+      <p class="pin-error" id="pin-error"></p>
+    </div>
+    <button class="btn-primary" id="btn-pin-confirm">Confirmar</button>
+    <button class="btn-back" id="btn-pin-back">← Volver</button>
   </div>
 </div>
 
@@ -252,8 +279,8 @@
 const TOTAL      = 300; 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxsgYjHcJgS2XL7LpsqFlqam6f1OvrzCiYHP3nXKXzYVYiaUgeZdcyLIlUi1upDMpy1/exec';
 
-// Hash SHA-256 de la clave secreta de administrador
-const HASH_CLAVE = 'e3a7f2426fe7214eb03bbb6cb232412bb4f484cebceafc7d395a9a23a57a2361';
+// Hash SHA-256 de la clave de administrador
+const HASH_CLAVE = 'e3a7f2426fe7214eb03bbb6cb232412bb4f484cebceafc7d395a9a23a57a2361'; 
 
 let localData   = {};
 let selectedNum = null;
@@ -270,8 +297,12 @@ function setStatus(txt) {
 
 // ── API ─────────────────────────────────────
 async function apiFetch(params) {
+  // CORRECCIÓN ANTI-CACHÉ: Agregamos timestamp
+  params.t = new Date().getTime(); 
   const url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
-  const res = await fetch(url, { redirect: 'follow' });
+  
+  // Agregamos cache: 'no-store' para obligar a pedir datos frescos
+  const res = await fetch(url, { redirect: 'follow', cache: 'no-store' }); 
   if (!res.ok) throw new Error('HTTP ' + res.status);
   return res.json();
 }
@@ -294,7 +325,8 @@ async function guardarNumero(num, name, phone) {
   setSync('syncing', 'Guardando...');
   setGridBusy(true);
   try {
-    const resp = await apiFetch({ action: 'set', num, name: encodeURIComponent(name), phone: encodeURIComponent(phone) });
+    // CORRECCIÓN %20: Enviamos name y phone sin encodeURIComponent
+    const resp = await apiFetch({ action: 'set', num, name: name, phone: phone });
 
     if (resp.ok) {
       localData[num] = { name, phone };
@@ -310,7 +342,6 @@ async function guardarNumero(num, name, phone) {
         ' fue tomado por <b>' + (resp.nombre || 'otra persona') +
         '</b> justo antes. La lista ha sido actualizada.'
       );
-
     } else {
       setSync('error', 'Error al guardar');
       setStatus('El servidor rechazó la operación. Intenta de nuevo.');
@@ -319,6 +350,31 @@ async function guardarNumero(num, name, phone) {
   } catch(e) {
     setSync('error', 'Error al guardar');
     setStatus('No se pudo guardar. Verifica tu conexión.');
+  }
+  setGridBusy(false);
+}
+
+// FUNCION DE LIBERAR NÚMERO
+async function liberarNumero(num) {
+  setSync('syncing', 'Liberando...');
+  setGridBusy(true);
+  try {
+    const resp = await apiFetch({ action: 'delete', num });
+
+    if (resp.ok) {
+      delete localData[num];
+      renderGrid(); updateStats();
+      setSync('online', 'Actualizado ✓');
+      setStatus('Actualizado: ' + new Date().toLocaleTimeString());
+    } else {
+      setSync('error', 'Error al liberar');
+      setStatus('No se pudo liberar. Intenta de nuevo.');
+      await cargarDatos();
+    }
+
+  } catch(e) {
+    setSync('error', 'Error al liberar');
+    setStatus('No se pudo liberar. Verifica tu conexión.');
   }
   setGridBusy(false);
 }
@@ -350,7 +406,6 @@ function updateStats() {
   document.getElementById('stat-taken').textContent = taken + ' ocupados';
 }
 
-// ── Modal principal ──────────────────────────
 function openModal(num) {
   selectedNum = num;
   document.getElementById('modal-num').textContent = '#' + String(num).padStart(3, '0');
@@ -430,7 +485,66 @@ document.getElementById('inp-reg-pin').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-save').click();
 });
 
-// ── Modal de aviso ───────────────────────────
+// ── LÓGICA DE LIBERAR NÚMERO ─────
+document.getElementById('btn-release').onclick = () => {
+  const num = selectedNum; 
+  closeModal();
+  selectedNum = num;         
+  abrirPinModal();
+};
+
+function abrirPinModal() {
+  document.getElementById('pin-num-label').textContent = '#' + String(selectedNum).padStart(3, '0');
+  document.getElementById('inp-pin').value = '';
+  document.getElementById('pin-error').textContent = '';
+  document.getElementById('inp-pin').classList.remove('error');
+  document.getElementById('overlay-pin').classList.add('active');
+  setTimeout(() => document.getElementById('inp-pin').focus(), 80);
+}
+
+function cerrarPinModal() {
+  document.getElementById('overlay-pin').classList.remove('active');
+}
+
+document.getElementById('btn-pin-close').onclick = cerrarPinModal;
+document.getElementById('overlay-pin').onclick = e => {
+  if (e.target === document.getElementById('overlay-pin')) cerrarPinModal();
+};
+
+document.getElementById('btn-pin-back').onclick = () => {
+  cerrarPinModal();
+  if (selectedNum) openModal(selectedNum);
+};
+
+document.getElementById('btn-pin-confirm').onclick = async () => {
+  const pin    = document.getElementById('inp-pin').value;
+  const errEl  = document.getElementById('pin-error');
+  const pinInp = document.getElementById('inp-pin');
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pin);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+  if (hashHex !== HASH_CLAVE) {
+    errEl.textContent = 'Clave incorrecta. Intenta de nuevo.';
+    pinInp.classList.add('error');
+    pinInp.value = '';
+    setTimeout(() => pinInp.classList.remove('error'), 400);
+    setTimeout(() => pinInp.focus(), 80);
+    return;
+  }
+
+  const num = selectedNum;
+  cerrarPinModal();
+  await liberarNumero(num);
+};
+
+document.getElementById('inp-pin').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-pin-confirm').click();
+});
+
 function mostrarAviso(titulo, msg) {
   document.getElementById('aviso-titulo').textContent = titulo;
   document.getElementById('aviso-msg').innerHTML = msg;
@@ -447,10 +561,7 @@ document.getElementById('overlay-aviso').onclick = e => {
   if (e.target === document.getElementById('overlay-aviso')) cerrarAviso();
 };
 
-// Refresca cada 30 seg
 setInterval(cargarDatos, 30000);
-
-// Arranque
 renderGrid();
 updateStats();
 cargarDatos();
